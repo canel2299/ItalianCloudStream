@@ -1,9 +1,8 @@
-{
+json{
   "name": "Multi-Site Auto-Discovery",
   "description": "Automatically discovers and adds streaming sites from Pastebin",
   "manifestVersion": 1,
   "pluginLists": [
     "https://raw.githubusercontent.com/canel2299/ItalianCloudStream/main/plugins.json"
   ]
-
 }
