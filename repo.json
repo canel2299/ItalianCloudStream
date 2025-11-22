@@ -1,6 +1,6 @@
 {
-  "name": "ItalianCloudStream",
-  "description": "Multi-site streaming providers",
+  "name": "Italian CloudStream",
+  "description": "Multi-site auto-discovery plugin",
   "manifestVersion": 1,
   "pluginLists": [
     "https://raw.githubusercontent.com/canel2299/ItalianCloudStream/main/plugins.json"
