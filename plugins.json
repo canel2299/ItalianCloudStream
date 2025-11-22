@@ -1,16 +1,17 @@
 [
   {
     "name": "MultiSiteProvider",
-    "pluginClassName": "com.attf.multisite.MultiSitePlugin",
+    "url": "https://raw.githubusercontent.com/canel2299/ItalianCloudStream/main/MultiSiteProvider.cs3",
     "version": 1,
-    "requiresResources": false,
+    "apiVersion": 1,
+    "internalName": "MultiSiteProvider",
     "description": "Auto-discovering multi-site streaming provider. Fetches sites from Pastebin.",
     "authors": ["attf"],
-    "repositoryUrl": "https://raw.githubusercontent.com/canel2299/ItalianCloudStream/main/MultiSiteProvider.cs3",
-    "fileUrl": "https://raw.githubusercontent.com/canel2299/ItalianCloudStream/main/MultiSiteProvider.cs3",
-    "iconUrl": "https://www.google.com/s2/favicons?domain=github.com&sz=128",
+    "repositoryUrl": "https://github.com/canel2299/ItalianCloudStream",
     "status": 1,
     "tvTypes": ["Movie", "TvSeries", "Anime", "Cartoon"],
-    "language": "it"
+    "language": "it",
+    "iconUrl": "https://www.google.com/s2/favicons?domain=github.com&sz=128",
+    "fileSize": 35758
   }
 ]
