@@ -1,9 +1,8 @@
 {
-  "name": "Multi-Site Auto-Discovery",
-  "description": "Automatically discovers and adds streaming sites from Pastebin",
+  "name": "ItalianCloudStream",
+  "description": "Multi-site streaming providers",
   "manifestVersion": 1,
   "pluginLists": [
     "https://raw.githubusercontent.com/canel2299/ItalianCloudStream/main/plugins.json"
   ]
 }
-
