@@ -306,24 +306,31 @@ class MultiSitePlugin : Plugin() {
                         || document.select(".season, .episode, .seasons-list").isNotEmpty()
                         || title.contains(Regex("stagione|season", RegexOption.IGNORE_CASE))
                     
-                    // Find streaming links - improved patterns for Italian sites
+                    // Find streaming links - handle Italian site patterns with spoilers and short links
                     val links = document.select("""
-                        a[href*="supervideo"],
+                        .su-spoiler-content a[href],
+                        .entry-content a[href*="uprot"],
+                        .entry-content a[href*="clicka"],
+                        .entry-content a[href*="mixdrop"],
+                        .entry-content a[href*="supervideo"],
+                        .entry-content a[href*="streamtape"],
+                        a[href*="uprot"],
+                        a[href*="clicka"],
                         a[href*="mixdrop"],
+                        a[href*="supervideo"],
                         a[href*="streamtape"],
                         a[href*="doodstream"],
-                        a[href*="voe.sx"],
-                        a[href*="streamhide"],
-                        iframe[src*="supervideo"],
-                        iframe[src*="mixdrop"],
-                        iframe[src*="streamtape"],
                         iframe[src*="embed"]
                     """.trimIndent()).mapNotNull {
-                        it.attr("abs:href").takeIf { url -> url.isNotEmpty() && url.startsWith("http") }
-                            ?: it.attr("abs:src").takeIf { url -> url.isNotEmpty() && url.startsWith("http") }
+                        val href = it.attr("abs:href")
+                        if (href.isNotEmpty() && href.startsWith("http")) {
+                            href
+                        } else {
+                            it.attr("abs:src").takeIf { url -> url.isNotEmpty() && url.startsWith("http") }
+                        }
                     }.distinct()
                     
-                    Log.d("Provider:$siteName", "Found ${links.size} video links")
+                    Log.d("Provider:$siteName", "Found ${links.size} video links (including short links)")
                     
                     val data = links.toJson()
                     
@@ -398,20 +405,28 @@ class MultiSitePlugin : Plugin() {
                 return try {
                     val links = parseJson<List<String>>(data)
                     
-                    Log.d("Provider:$siteName", "Extracting ${links.size} links")
+                    Log.d("Provider:$siteName", "Processing ${links.size} links")
                     
                     var extracted = 0
                     links.forEach { link ->
                         try {
+                            // Try to extract directly first
                             val success = loadExtractor(link, mainUrl, subtitleCallback, callback)
-                            if (success) extracted++
+                            if (success) {
+                                extracted++
+                                Log.d("Provider:$siteName", "✓ Extracted: $link")
+                            } else {
+                                Log.w("Provider:$siteName", "✗ No extractor for: $link")
+                            }
                         } catch (e: Exception) {
                             Log.e("Provider:$siteName", "Extractor error for $link: ${e.message}")
                         }
                     }
                     
-                    Log.d("Provider:$siteName", "✓ Extracted $extracted/${links.size} links")
-                    extracted > 0
+                    Log.d("Provider:$siteName", "✓ Extracted $extracted/${links.size} links successfully")
+                    
+                    // Return true if we found ANY links, even if not all extracted
+                    extracted > 0 || links.isNotEmpty()
                 } catch (e: Exception) {
                     Log.e("Provider:$siteName", "LoadLinks error: ${e.message}")
                     false
