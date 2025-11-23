@@ -12,6 +12,7 @@ import kotlinx.coroutines.runBlocking
 import com.lagradost.api.Log
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
+import com.lagradost.cloudstream3.utils.ShortLink
 
 /**
  * Improved Multi-Site Plugin for Italian Streaming Sites
@@ -403,25 +404,45 @@ class MultiSitePlugin : Plugin() {
                     var foundAny = false
 
                     links.forEach { link ->
-                        Log.d("Provider:$siteName", "Trying link: $link")
+                        Log.d("Provider:$siteName", "Processing: $link")
 
                         try {
-                            when {
-                                link.contains("uprot.net") -> {
-                                    UprotBypass().getUrl(link, mainUrl, subtitleCallback, callback)
-                                    foundAny = true
+                            var finalLink = link
+
+                            // Use CloudStream's built-in ShortLink bypasser for uprot
+                            if (link.contains("uprot.net")) {
+                                Log.d("Provider:$siteName", "Bypassing uprot: $link")
+                                finalLink = ShortLink.unshortenUprot(link)
+                                Log.d("Provider:$siteName", "After uprot bypass: $finalLink")
+
+                                // Keep bypassing if still contains uprot
+                                var attempts = 0
+                                while (finalLink.contains("uprot.net") && attempts < 3) {
+                                    finalLink = ShortLink.unshortenUprot(finalLink)
+                                    attempts++
+                                    Log.d("Provider:$siteName", "Uprot attempt $attempts: $finalLink")
                                 }
-                                link.contains("clicka.cc") || link.contains("stayonline") -> {
-                                    ClickaBypass().getUrl(link, mainUrl, subtitleCallback, callback)
+                            }
+
+                            // Use ClickaBypass for clicka.cc links
+                            if (finalLink.contains("clicka.cc") || finalLink.contains("stayonline")) {
+                                Log.d("Provider:$siteName", "Bypassing clicka: $finalLink")
+                                ClickaBypass().getUrl(finalLink, mainUrl, subtitleCallback, callback)
+                                foundAny = true
+                            } else {
+                                // Try standard extractors
+                                Log.d("Provider:$siteName", "Trying extractor for: $finalLink")
+                                val success = loadExtractor(finalLink, mainUrl, subtitleCallback, callback)
+                                if (success) {
                                     foundAny = true
-                                }
-                                else -> {
-                                    val success = loadExtractor(link, mainUrl, subtitleCallback, callback)
-                                    if (success) foundAny = true
+                                    Log.d("Provider:$siteName", "✓ Extracted successfully")
+                                } else {
+                                    Log.w("Provider:$siteName", "✗ No extractor found")
                                 }
                             }
                         } catch (e: Exception) {
                             Log.e("Provider:$siteName", "Error with $link: ${e.message}")
+                            e.printStackTrace()
                         }
                     }
 
