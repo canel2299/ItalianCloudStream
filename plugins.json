@@ -3,7 +3,7 @@
     "name": "MultiSiteProvider",
     "description": "Auto-discovering multi-site streaming provider. Fetches sites from Pastebin.",
     "authors": ["attf"],
-    "version": 2,
+    "version": 3,
     "tvTypes": ["Movie", "TvSeries", "Cartoon", "Anime"],
     "language": "multi",
     "iconUrl": "https://www.google.com/s2/favicons?domain=github.com&sz=128",

@@ -3,6 +3,6 @@
   "description": "Automatically discovers and adds streaming sites from Pastebin",
   "manifestVersion": 1,
   "pluginLists": [
-    "https://raw.githubusercontent.com/canel22/ItalianCloudStream/main/plugins.json"
+    "https://raw.githubusercontent.com/canel2299/ItalianCloudStream/master/plugins.json"
   ]
 }
