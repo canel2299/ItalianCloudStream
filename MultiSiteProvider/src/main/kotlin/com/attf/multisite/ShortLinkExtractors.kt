@@ -96,6 +96,7 @@ class ClickaBypass : ExtractorApi() {
         callback: (ExtractorLink) -> Unit
     ) {
         try {
+            Log.d("PROVA", "Sono entrato")
             Log.d("ClickaBypass", "Bypassing: $url")
 
             val realUrl = bypassClicka(url)

@@ -11,8 +11,8 @@ import android.content.Context
 import kotlinx.coroutines.runBlocking
 import com.lagradost.api.Log
 import org.jsoup.nodes.Document
-import org.jsoup.nodes.Element
 import com.lagradost.cloudstream3.utils.ShortLink
+import org.jsoup.nodes.Element
 
 /**
  * Improved Multi-Site Plugin for Italian Streaming Sites
@@ -418,6 +418,7 @@ class MultiSitePlugin : Plugin() {
                                 // Keep bypassing if still contains uprot
                                 var attempts = 0
                                 while (finalLink.contains("uprot.net") && attempts < 3) {
+
                                     finalLink = ShortLink.unshortenUprot(finalLink)
                                     attempts++
                                     Log.d("Provider:$siteName", "Uprot attempt $attempts: $finalLink")

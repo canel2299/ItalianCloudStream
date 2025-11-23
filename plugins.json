@@ -2,7 +2,7 @@
   {
     "name": "MultiSiteProvider",
     "url": "https://raw.githubusercontent.com/canel2299/ItalianCloudStream/master/MultiSiteProvider/build/MultiSiteProvider.cs3",
-    "version": 3,
+    "version": 4,
     "apiVersion": 1,
     "internalName": "MultiSiteProvider",
     "description": "Auto-discovering multi-site streaming provider. Fetches sites from Pastebin.",
