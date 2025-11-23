@@ -11,6 +11,7 @@ import android.content.Context
 import kotlinx.coroutines.runBlocking
 import com.lagradost.api.Log
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 import com.lagradost.cloudstream3.utils.ShortLink
 
 /**
