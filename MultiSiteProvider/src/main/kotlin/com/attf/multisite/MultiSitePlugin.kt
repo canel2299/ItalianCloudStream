@@ -11,8 +11,8 @@ import android.content.Context
 import kotlinx.coroutines.runBlocking
 import com.lagradost.api.Log
 import org.jsoup.nodes.Document
-import com.lagradost.cloudstream3.utils.ShortLink
 import org.jsoup.nodes.Element
+import com.lagradost.cloudstream3.utils.ShortLink
 
 /**
  * Improved Multi-Site Plugin for Italian Streaming Sites
@@ -306,12 +306,16 @@ class MultiSitePlugin : Plugin() {
                         }
                     } else {
                         val links = document.select("""
-                            .su-spoiler-content a[href],
-                            .entry-content a[href*="uprot"],
-                            .entry-content a[href*="clicka"],
-                            .entry-content a[href*="mixdrop"]
+                            .su-spoiler-content a[href*="uprot"],
+                            .entry-content a[href*="uprot"]
                         """.trimIndent()).mapNotNull {
-                            it.attr("abs:href").takeIf { url -> url.isNotEmpty() && url.startsWith("http") }
+                            val href = it.attr("abs:href")
+                            // Only keep uprot links since clicka.cc is blocked by Cloudflare
+                            if (href.isNotEmpty() && href.startsWith("http") && href.contains("uprot")) {
+                                href
+                            } else {
+                                null
+                            }
                         }.distinct()
 
                         Log.d("Provider:$siteName", "Movie: Found ${links.size} links")
@@ -357,7 +361,13 @@ class MultiSitePlugin : Plugin() {
 
                                 val doc = org.jsoup.Jsoup.parse(line)
                                 val epLinks = doc.select("a[href]").mapNotNull {
-                                    it.attr("abs:href").takeIf { url -> url.isNotEmpty() }
+                                    val href = it.attr("abs:href").takeIf { url -> url.isNotEmpty() }
+                                    // Only keep uprot links (MaxStream) since clicka.cc is blocked by Cloudflare
+                                    if (href != null && href.contains("uprot")) {
+                                        href
+                                    } else {
+                                        null
+                                    }
                                 }.distinct()
 
                                 if (epLinks.isNotEmpty()) {
@@ -418,7 +428,6 @@ class MultiSitePlugin : Plugin() {
                                 // Keep bypassing if still contains uprot
                                 var attempts = 0
                                 while (finalLink.contains("uprot.net") && attempts < 3) {
-
                                     finalLink = ShortLink.unshortenUprot(finalLink)
                                     attempts++
                                     Log.d("Provider:$siteName", "Uprot attempt $attempts: $finalLink")

@@ -133,11 +133,12 @@ class ClickaBypass : ExtractorApi() {
                 requestBody = data.toRequestBody("application/x-www-form-urlencoded; charset=UTF-8".toMediaTypeOrNull()),
                 timeout = 10_000
             )
-
+            //TODO: Capire cosa voleva fare claude
             val jsonResponse = response.text
             Log.d("PROVA ClickaBypass", "Response: $jsonResponse")
 
             val json = JSONObject(jsonResponse)
+            //Qui ti ritorna una stringa che cerca di convertire in object
             val realUrl = json.optJSONObject("data")?.optString("value")
 
             if (realUrl != null && realUrl.startsWith("http")) {
