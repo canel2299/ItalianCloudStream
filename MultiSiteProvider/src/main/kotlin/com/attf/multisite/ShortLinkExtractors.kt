@@ -97,19 +97,19 @@ class ClickaBypass : ExtractorApi() {
     ) {
         try {
             Log.d("PROVA", "Sono entrato")
-            Log.d("ClickaBypass", "Bypassing: $url")
+            Log.d("PROVA ClickaBypass", "Bypassing: $url")
 
             val realUrl = bypassClicka(url)
 
             if (realUrl != null) {
-                Log.d("ClickaBypass", "Final URL: $realUrl")
+                Log.d("PROVA ClickaBypass", "Final URL: $realUrl")
                 loadExtractor(realUrl, referer, subtitleCallback, callback)
             } else {
-                Log.e("ClickaBypass", "Failed to bypass")
+                Log.e("PROVA ClickaBypass", "Failed to bypass")
             }
 
         } catch (e: Exception) {
-            Log.e("ClickaBypass", "Error: ${e.message}")
+            Log.e("PROVA ClickaBypass", "Error: ${e.message}")
             e.printStackTrace()
         }
     }
@@ -135,20 +135,20 @@ class ClickaBypass : ExtractorApi() {
             )
 
             val jsonResponse = response.text
-            Log.d("ClickaBypass", "Response: $jsonResponse")
+            Log.d("PROVA ClickaBypass", "Response: $jsonResponse")
 
             val json = JSONObject(jsonResponse)
             val realUrl = json.optJSONObject("data")?.optString("value")
 
             if (realUrl != null && realUrl.startsWith("http")) {
-                Log.d("ClickaBypass", "Found URL: $realUrl")
+                Log.d("PROVA ClickaBypass", "Found URL: $realUrl")
                 realUrl
             } else {
-                Log.e("ClickaBypass", "No URL in response")
+                Log.e("PROVA ClickaBypass", "No URL in response")
                 null
             }
         } catch (e: Exception) {
-            Log.e("ClickaBypass", "Bypass error: ${e.message}")
+            Log.e("PROVA ClickaBypass", "Bypass error: ${e.message}")
             null
         }
     }
